@@ -339,15 +339,14 @@ namespace WpfMerge
             while (flag)
             {
                 bool ok1 = true;
-                try
+
+                if (slistF.Count > o && slistF1.Count > i)
                 {
                     if (slistF[o].ToString().Trim(new Char[] { ' ', '\t' }) != slistF1[i].ToString().Trim(new Char[] { ' ', '\t' }))
                         ok1 = false;
                 }
-                catch
-                {
+                else
                     ok1 = false;
-                }
 
                 if (ok1 && o_z == -1)
                 {
