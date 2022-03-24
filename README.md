@@ -1,17 +1,14 @@
-#WpfMerge
-____
+# WpfMerge
 WPF application to compare changes in two files and original file.
 You can merge the changes of both files into one.
 
-Приложение с использованием технологии WPF для отслеживания изменений в двух файлах на основании эталонного файла.
-После чего можно объединить изменения из двух этих файлов.
+РџСЂРёР»РѕР¶РµРЅРёРµ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј С‚РµС…РЅРѕР»РѕРіРёРё WPF РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ РёР·РјРµРЅРµРЅРёР№ РІ РґРІСѓС… С„Р°Р№Р»Р°С… РЅР° РѕСЃРЅРѕРІР°РЅРёРё СЌС‚Р°Р»РѕРЅРЅРѕРіРѕ С„Р°Р№Р»Р°.
+РџРѕСЃР»Рµ С‡РµРіРѕ РјРѕР¶РЅРѕ РѕР±СЉРµРґРёРЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РёР· РґРІСѓС… СЌС‚РёС… С„Р°Р№Р»РѕРІ.
 
-##Installing
-____
+## Installing
 You can download the latest release and run it.
 
-##Usage
-____
+## Usage
 You need to select the source (original) file and the two revised files (after editing) you want to compare.
 
 Click the OK button and app will immediately show
