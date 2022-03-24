@@ -125,12 +125,7 @@ namespace WpfMerge
         {
             try
             {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
-
-                StreamWriter textFile = new StreamWriter(fileName, true);
+                StreamWriter textFile = new StreamWriter(fileName, false, System.Text.Encoding.Default);
                 textFile.WriteLine(updateText);
                 textFile.Close();
             }
