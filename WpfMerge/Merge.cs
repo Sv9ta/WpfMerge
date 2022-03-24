@@ -15,7 +15,7 @@ namespace WpfMerge
     {
         private string str;
         private string strWithoutSpace;
-        private int status;     // 1- Ok, 2- Change, 3- Add, 4- Dell
+        private int status;     // 1- Match, 2- Change, 3- Add, 4- Dell
 
         public string Str { get { return str; } set { str = value; } }
         public string StrWithoutSpace { get { return strWithoutSpace; } set { strWithoutSpace = value; } }
@@ -39,12 +39,13 @@ namespace WpfMerge
     }
 
 
-
+    //-- Unit - блок строк кода, ограниченный изменением состояния строк.
+    //-- состояния: 1- Match, 2- Change, 3- Add, 4- Dell
     public class Unit
     {
         private int num;
         private ArrayList list;
-        private int status;     // 1- Ok, 2- Change, 3- Add, 4- Dell
+        private int status;     // 1- Match, 2- Change, 3- Add, 4- Dell
 
         public int Num { get { return num; } set { num = value; } }
         public ArrayList List { get { return list; } set { list = value; } }
@@ -69,30 +70,20 @@ namespace WpfMerge
                 if (!this.List[h].GetHashCode().Equals(unt.List[h].GetHashCode()))
                     return false;
             }
-
-
             return true;
         }
-
 
         //public override int GetHashCode()
         //{
         //   // return this.Status.GetHashCode() ^ this.Num.GetHashCode();
         //    return (Status != null) ? Status.GetHashCode() : 0;
         //}
-        //---------------------------------------------------
     }
 
 
     static class Merge
     {
-
-        //public ArrayList files = new ArrayList();
-        //public string baseFile;
-        //public string dir;
-        //public bool isSaveFiles = false;
-
-
+        //-- Считывает текст из файла и возвращает SortedList, в котором элементы = строки файла
         public static SortedList ReadFile(string TestFile)
         {
             SortedList slistF = new SortedList();
@@ -111,7 +102,6 @@ namespace WpfMerge
                             {
                                 for (int i = 0; !sr.EndOfStream; i++)
                                 {
-                                    // slistF.Add(i, sr.ReadLine());
                                     s = sr.ReadLine();
                                     if (s.Trim(new Char[] { ' ', '\t' }).Length > 0)
                                         slistF.Add(i, s);
@@ -127,7 +117,6 @@ namespace WpfMerge
                     string ex = ioEx.Message;
                 }
             }
-
             return slistF;
         }
 
@@ -151,6 +140,7 @@ namespace WpfMerge
         }
 
 
+        //-- переводит структуру из блочной в построчную
         public static void StructuredFile(ref ArrayList listUnt)
         {
             ArrayList resList = new ArrayList();
@@ -174,18 +164,9 @@ namespace WpfMerge
 
 
 
-
+        //-- Объединить измененные файлы
         public static ArrayList MergeALLFiles(SortedList slistF, ArrayList listUnt1, ArrayList listUnt2, ref bool isConflict)
         {
-            //ArrayList listUnt1 = MergeFile(slistF, slistF1);
-            //ArrayList listUnt2 = MergeFile(slistF, slistF2);
-
-            //if (isSaveFiles)
-            //{
-            //    WriteFinishFileTest(listUnt1, "res1.txt");
-            //    WriteFinishFileTest(listUnt2, "res2.txt");
-            //}
-
             //-- переводим структуру из блочной в построчную
             StructuredFile(ref listUnt1);
             StructuredFile(ref listUnt2);
@@ -203,7 +184,7 @@ namespace WpfMerge
             bool ok = false;
             bool statusSame = false;
             bool strSame = false;
-            int status = 0; // 1- Ok, 2- Change, 3- Add, 4- Dell, ==== 5- Conflict
+            int status = 0; // 1- match, 2- Change, 3- Add, 4- Dell, ==== 5- Conflict
 
             while (flag)
             {
@@ -317,12 +298,12 @@ namespace WpfMerge
         }
 
 
-
+        //-- Возвращает список блоков строк сверяемого файла с их статусами (ок, изменение, добавление, удаление)
         public static ArrayList MergeFile(SortedList slistF, SortedList slistF1)
         {
             bool flag = true;
-            int o = 0; // счетчик нулевого списка
-            int i = 0; // счетчик первого списка
+            int o = 0; // счетчик нулевого(эталонного) списка
+            int i = 0; // счетчик первого(сверяемого) списка
             int o_z = -1; // замершая итерация o
             int i_z = -1; // замершая итерация i
             int countZ = 0; // кол-во замерших итераций o
@@ -340,6 +321,7 @@ namespace WpfMerge
             {
                 bool ok1 = true;
 
+                //-- сравниваем совпадают ли строки
                 if (slistF.Count > o && slistF1.Count > i)
                 {
                     if (slistF[o].ToString().Trim(new Char[] { ' ', '\t' }) != slistF1[i].ToString().Trim(new Char[] { ' ', '\t' }))
@@ -348,6 +330,7 @@ namespace WpfMerge
                 else
                     ok1 = false;
 
+                //-- изменений не было
                 if (ok1 && o_z == -1)
                 {
                     if (sl.Count == 0)
@@ -369,7 +352,7 @@ namespace WpfMerge
                         sll.AddRange(sl1);
                         unt.Num = 0;
                         unt.List = sll;
-                        unt.Status = 2;
+                        unt.Status = 2; //-- change
                         listUnt.Add(unt);
                         sl1.Clear();
                         sl2.Clear();
@@ -383,11 +366,12 @@ namespace WpfMerge
                 {
                     if (sl.Count != 0)
                     {
+                        //-- сохраняем блок строк, который накопился до изменения статуса
                         ArrayList sll = new ArrayList();
                         sll.AddRange(sl);
                         unt.Num = 0;
                         unt.List = sll;
-                        unt.Status = 1;
+                        unt.Status = 1; //-- match
                         listUnt.Add(unt);
                         sl.Clear();
                         unt = new Unit();
@@ -399,29 +383,32 @@ namespace WpfMerge
                         {
                             o_z = o;
                             countZ++;
-                            sl2.Add(slistF[o]);
+                            sl2.Add(slistF[o]); //-- строка, которая не совпала из эталонного списка
                         }
                         if (slistF1.Count > i)
                         {
                             i_z = i;
                             countZ1++;
-                            sl1.Add(slistF1[i]);
+                            sl1.Add(slistF1[i]); //-- строка, которая не совпала из сверяемого списка
                         }
                     }
                     else
                     {
-                        //-- список для сравнения o
+                        //-- Формируем из блока строк список для сравнения
+
+                        //-- список для сравнения o (из эталонного файла)
                         ArrayList listToCompare = new ArrayList();
                         for (int c = 0; c < countZ; c++)
                             listToCompare.Add(slistF[o_z + c].ToString().Trim(new Char[] { ' ', '\t' }));
 
-                        //-- список для сравнения i
+                        //-- список для сравнения i (из сравниваемого файла)
                         ArrayList listToCompare1 = new ArrayList();
                         for (int w = 0; w < countZ1; w++)
                             listToCompare1.Add(slistF1[i_z + w].ToString().Trim(new Char[] { ' ', '\t' }));
 
-                        //if (slistF1.Count > i && slistF[o_z].ToString() == slistF1[i].ToString() && sl1.Count > 0) //-- была вставка
-                        if (slistF1.Count > i && listToCompare.Contains(slistF1[i].ToString().Trim(new Char[] { ' ', '\t' })) && sl1.Count > 0) //-- была вставка
+                        //-- была вставка
+                        //if (slistF1.Count > i && slistF[o_z].ToString() == slistF1[i].ToString() && sl1.Count > 0) 
+                        if (slistF1.Count > i && listToCompare.Contains(slistF1[i].ToString().Trim(new Char[] { ' ', '\t' })) && sl1.Count > 0) 
                         {
                             if (o_z == 0)
                                 unt = new Unit();
@@ -430,7 +417,7 @@ namespace WpfMerge
                             o_z += num;
 
                             //--  Здесь вопрос, какая строка является изменением, а какие добавлением
-                            //-- Добавить сюда анализатор
+                            //-- Добавить сюда анализатор (Надо уточнить)
 
                             ArrayList listCh = new ArrayList();
                             if (num != 0) //-- значит было еще и изменение
@@ -440,24 +427,24 @@ namespace WpfMerge
                                 //-- изменение
                                 unt.Num = 1;
                                 unt.List = listCh;
-                                unt.Status = 2;
+                                unt.Status = 2; //-- change
                                 listUnt.Add(unt);
                                 unt = new Unit();
 
                                 sl1.RemoveRange(0, num);
                             }
 
-                            //-- вставка
+                            //-- сохраняем блок строк "Add" (вставка)
                             ArrayList sll = new ArrayList();
                             sll.AddRange(sl1);
                             unt.Num = 1;
                             unt.List = sll;
-                            unt.Status = 3;
+                            unt.Status = 3; //-- add
                             listUnt.Add(unt);
                             sl1.Clear();
                             unt = new Unit();
 
-                            //-- возврат
+                            //-- возврат итератора эталонного списка
                             o = o_z;
                             o_z = -1;
                             i_z = -1;
@@ -466,8 +453,9 @@ namespace WpfMerge
                             countZ = 0;
                             countZ1 = 0;
                         }
+                        //-- было удаление
                         //else if (slistF[o].ToString() == slistF1[i_z].ToString() && sl1.Count > 0) //-- было удаление
-                        else if (slistF.Count > o && listToCompare1.Contains(slistF[o].ToString().Trim(new Char[] { ' ', '\t' })) && sl1.Count > 0) //-- было удаление
+                        else if (slistF.Count > o && listToCompare1.Contains(slistF[o].ToString().Trim(new Char[] { ' ', '\t' })) && sl1.Count > 0) 
                         {
                             if (i_z == 0)
                                 unt = new Unit();
@@ -483,7 +471,7 @@ namespace WpfMerge
                                 //-- изменение
                                 unt.Num = 1;
                                 unt.List = listCh;
-                                unt.Status = 2;
+                                unt.Status = 2; //-- change
                                 listUnt.Add(unt);
                                 unt = new Unit();
 
@@ -494,7 +482,7 @@ namespace WpfMerge
                             sll.AddRange(sl2);
                             unt.Num = 1;
                             unt.List = sll;
-                            unt.Status = 4;
+                            unt.Status = 4; //-- dell
                             listUnt.Add(unt);
                             sl2.Clear();
                             unt = new Unit();
@@ -542,13 +530,14 @@ namespace WpfMerge
                 if (slistF.Count <= o && slistF1.Count <= i)
                 {
                     flag = false;
+                    //-- сохраняем последний блок строк
                     if (sl.Count > 0)
                     {
                         ArrayList sll = new ArrayList();
                         sll.AddRange(sl);
                         unt.Num = 2;
                         unt.List = sll;
-                        unt.Status = 1;
+                        unt.Status = 1; //-- match
                         listUnt.Add(unt);
                         sl.Clear();
                     }
@@ -570,7 +559,7 @@ namespace WpfMerge
 
                             unt.Num = 1;
                             unt.List = listCh;
-                            unt.Status = 2;
+                            unt.Status = 2; //-- change
                             listUnt.Add(unt);
                             unt = new Unit();
 
@@ -584,9 +573,9 @@ namespace WpfMerge
                         unt.Num = 2;
                         unt.List = sll;
                         if (o_z != -1 && o_z <= slistF.Count - 1)
-                            unt.Status = 2;
+                            unt.Status = 2; //-- change
                         else
-                            unt.Status = 3;
+                            unt.Status = 3; //-- add
                         listUnt.Add(unt);
                         unt = new Unit();
 
@@ -604,7 +593,7 @@ namespace WpfMerge
                         sll.AddRange(sl2);
                         unt.Num = 2;
                         unt.List = sll;
-                        unt.Status = 4;
+                        unt.Status = 4; //-- dell
                         listUnt.Add(unt);
                         sl2.Clear();
                     }
@@ -614,10 +603,6 @@ namespace WpfMerge
 
             return listUnt;
         }
-
-
-
-
 
     }
 }

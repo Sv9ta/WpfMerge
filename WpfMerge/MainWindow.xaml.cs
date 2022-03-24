@@ -35,7 +35,7 @@ namespace WpfMerge
         {
             InitializeComponent();
 
-            lblFileName0.Content = " ИСХОДНЫЙ ФАЙЛ: ";
+            lblFileName0.Content = " ЭТАЛОННЫЙ ФАЙЛ: ";
         }
 
 
@@ -50,11 +50,13 @@ namespace WpfMerge
             if (((OpenFileWindow)sender).NameFile1tbx.Visibility == Visibility.Visible && ((OpenFileWindow)sender).NameFile2tbx.Visibility == Visibility.Visible)
             {
                 fileName1 = ((OpenFileWindow)sender).NameFile1tbx.Text;
-                lblFileName1.Content += fileName1;
+                lblFileName1.Content += "...";
+                lblFileName1.Content += fileName1.Substring(fileName1.LastIndexOf("\\"));
                 //ReadText(fdsvFile1, fileName1);
-            
+
                 fileName2 = ((OpenFileWindow)sender).NameFile2tbx.Text;
-                lblFileName2.Content += fileName2;
+                lblFileName2.Content += "...";
+                lblFileName2.Content += fileName2.Substring(fileName2.LastIndexOf("\\"));
                 //ReadText(fdsvFile2, fileName2);
 
                 //-- сравнить файлы с исходным
@@ -274,7 +276,7 @@ namespace WpfMerge
             ofw.ButtonClicked += ofw_ButtonClicked;
             ofw.ActivatedOfw += ofw_ActivatedOfw; 
             ofw.ClosingOfw += ofw_ClosingOfw; 
-            ofw.lblOpenFile.Content = "Выберите исходный файл";
+            ofw.lblOpenFile.Content = "Выберите эталонный файл";
             ofw.Show();
         }
 
@@ -305,10 +307,10 @@ namespace WpfMerge
 
         private void buttonChangeFile0_Click(object sender, RoutedEventArgs e)
         {
-            lblFileName0.Content = " ИСХОДНЫЙ ФАЙЛ: ";
+            lblFileName0.Content = " ЭТАЛОННЫЙ ФАЙЛ: ";
             OpenFileWindow ofw = new OpenFileWindow();
             ofw.ButtonClicked += ofw_ButtonClicked;
-            ofw.lblOpenFile.Content = "Выберите исходный файл";
+            ofw.lblOpenFile.Content = "Выберите эталонный файл";
             ofw.Show();
         }
 

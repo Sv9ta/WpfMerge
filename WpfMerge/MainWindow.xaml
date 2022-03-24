@@ -23,11 +23,11 @@
             <Button x:Name="buttonOpenFile1and2" Content="Открыть"  Width="90" Height="25" Margin="14,4,4,4" Click="buttonOpenFile1and2_Click" ToolTip="Открыть файлы для сравнения" />
             <Popup x:Name="popup1" StaysOpen="False" Placement="Mouse" MaxWidth="180" AllowsTransparency="True"  >
                 <TextBlock TextWrapping="Wrap" Width="180" Background="#FFD6F15C" Opacity="1" >
-                    Сначала необходимо выбрать исходный файл
+                    Сначала необходимо выбрать эталонный файл
                 </TextBlock>
             </Popup>
-            <Button x:Name="buttonChangeFile0" Content="Исходный файл"  Width="100" Height="25" Margin="4" Click="buttonChangeFile0_Click"  ToolTip="Выбрать исходный файл" />
-            <Button x:Name="buttonMerge" Content="Объединить"  Width="95" Height="25" Margin="4" Click="buttonMerge_Click" ToolTip="Объединить измененные файлы" />
+            <Button x:Name="buttonChangeFile0" Content="Эталонный файл"  Width="112" Height="25" Margin="4" Click="buttonChangeFile0_Click"  ToolTip="Выбрать эталонный файл" />
+            <Button x:Name="buttonMerge" Content="Объединить файлы"  Width="130" Height="25" Margin="4" Click="buttonMerge_Click" ToolTip="Объединить измененные файлы" />
             <Popup x:Name="popup2" StaysOpen="False" Placement="Mouse" MaxWidth="180" AllowsTransparency="True" >
                 <TextBlock TextWrapping="Wrap" Width="150" Height="20" Background="#FFD6F15C" Opacity="1" >
                     Выберите все файлы
