@@ -6,11 +6,14 @@ You can merge the changes of both files into one.
 После чего можно объединить изменения из двух этих файлов.
 
 ## Installing
-You can download the latest release and run it.
-![Описание](ссылка)
+You can download the 
+[latest release](https://github.com/Sv9ta/WpfMerge/releases/download/v1.0.0/WpfMerge.exe) and run it.
 
 ## Usage
 You need to select the source (original) file and the two revised files (after editing) you want to compare.
+
+you can take these files
+[these files](https://github.com/Sv9ta/WpfMerge/releases/download/v1.0.0/WpfMerge.exe) and run it.
 
 <img src="screenshots/1.png" alt="open original file" width="70%">
 <img src="screenshots/2.png" alt="open original file" width="70%">
