@@ -12,8 +12,8 @@ You can download the
 ## Usage
 You need to select the source (original) file and the two revised files (after editing) you want to compare.
 
-you can take these files
-[these files](https://github.com/Sv9ta/WpfMerge/releases/download/v1.0.0/WpfMerge.exe) and run it.
+you can take 
+[these files](https://github.com/Sv9ta/WpfMerge/tree/master/files%20to%20compare) to compare.
 
 <img src="screenshots/1.png" alt="open original file" width="70%">
 <img src="screenshots/2.png" alt="open original file" width="70%">
